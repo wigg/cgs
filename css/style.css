@@ -252,6 +252,22 @@ button {
   transition: border-color .15s, color .15s;
 }
 .car-picker button:hover { border-color: rgba(232, 176, 74, 0.45); }
+.car-picker button { position: relative; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.car-picker img { -webkit-user-drag: none; pointer-events: none; }
+.pick-grip {
+  position: absolute; top: 4px; left: 4px; z-index: 2;
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1; color: var(--text, #e8eaed);
+  background: rgba(15, 20, 26, 0.55); border-radius: 8px;
+  opacity: 0.75; cursor: grab; touch-action: none;
+}
+.pick-grip:hover { opacity: 1; }
+.car-picker button.dragging {
+  z-index: 60; opacity: 0.95; cursor: grabbing; transition: none;
+  border-color: var(--accent); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+}
+.car-picker.sorting button:not(.dragging) { transition: none; }
+.car-picker.sorting, .car-picker.sorting * { cursor: grabbing; }
 .pick-art { display: block; width: 100%; }
 .pick-art img { display: none; width: 100%; height: auto; }
 .pick-art.has-photo img { display: block; }
@@ -1010,3 +1026,4 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .swatch[aria-pressed="true"] { border-color: var(--bg, #0e1317); box-shadow: 0 0 0 3px #fff; }
 .swatch-custom { background: conic-gradient(#ff4d4d, #ffd24d, #5be37d, #3fe0e0, #4da3ff, #a78bfa, #ff4d4d); overflow: hidden; }
 .swatch-custom input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.car-order-hint { font-size: 13px; margin: 6px 2px 0; text-align: center; }
