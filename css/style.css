@@ -998,4 +998,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .info-list dt { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
 .info-list dd { margin: 0; font-size: 15px; font-weight: 600; text-align: right; white-space: nowrap; }
 #infoPos { white-space: pre-line; line-height: 1.3; }
-.info-box.float { position: absolute; right: 16px; bottom: 16px; width: 215px; flex-direction: column; align-items: stretch; gap: 8px; }
+.info-box.float { position: absolute; right: 16px; width: 215px; flex-direction: column; align-items: stretch; gap: 8px; }
+.info-box.float .info-list div { flex-direction: column; align-items: flex-start; gap: 0; }
+.info-box.float .info-list dd { text-align: left; }
+.info-box.float .info-list { gap: 6px; }
