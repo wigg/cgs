@@ -205,7 +205,9 @@ button {
 .batt-end { fill: #8a8a90; font-size: 15px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
 .batt-icon rect:not(.fill), .batt-icon path:not(.fill) { fill: none; stroke: #fff; stroke-width: 2; }
 .batt-icon .fill { fill: #fff; stroke: none; }
-.g-range { fill: #fff; font-size: 31px; font-weight: 700; font-stretch: 104%; text-anchor: start; dominant-baseline: central; font-variant-numeric: tabular-nums; }
+.g-gear { fill: #fff; font-size: 34px; font-weight: 700; font-stretch: 112%; text-anchor: middle; }
+.g-gear.hide { display: none; }
+.g-range { fill: #fff; font-size: 21px; font-weight: 700; font-stretch: 104%; text-anchor: start; dominant-baseline: central; font-variant-numeric: tabular-nums; }
 .g-range.low { fill: #ff6b6f; }
 
 .bars { width: 100%; max-width: 470px; }
