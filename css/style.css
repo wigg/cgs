@@ -972,3 +972,30 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 }
 .pad-launch.shown { display: flex; }
 .pad-launch.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(232, 176, 74, 0.35), 0 8px 24px rgba(0, 0, 0, 0.5); }
+
+/* Info box: compass, altitude, position and clock (GPS). Bottom right of the gauge panel on a wide screen, a row under the dial otherwise. */
+.info-box {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; max-width: 470px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.info-compass { display: flex; align-items: center; gap: 10px; flex: none; }
+.info-compass svg { width: 56px; height: 56px; }
+.info-compass b { display: block; font-size: 20px; line-height: 1.1; }
+.info-compass span { display: block; font-size: 13px; color: var(--muted); }
+.ic-ring { fill: #000; stroke: #3a3a3f; stroke-width: 3; }
+.ic-n { fill: var(--muted); font-size: 11px; font-weight: 700; text-anchor: middle; }
+.ic-arrow { fill: #ece06a; }
+#infoNeedle { transform-origin: 32px 32px; transition: transform 0.5s ease-out; }
+.info-box.idle .ic-arrow { fill: #6b6b72; }
+.info-list { margin: 0; flex: 1; min-width: 0; display: grid; gap: 3px; }
+.info-list div { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.info-list dt { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+.info-list dd { margin: 0; font-size: 15px; font-weight: 600; text-align: right; white-space: nowrap; }
+#infoPos { white-space: pre-line; line-height: 1.3; }
+.info-box.float { position: absolute; right: 16px; bottom: 16px; width: 215px; flex-direction: column; align-items: stretch; gap: 8px; }
