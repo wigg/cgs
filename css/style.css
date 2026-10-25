@@ -158,13 +158,12 @@ button {
   user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
 }
 
-/* GPS drive: the dial takes all the room it has, the panel's width or the
-   screen height left over after the top bar and the throttle bar (about
-   160 px). The dial is as tall as wide. */
+/* The dial is as tall as wide. Maximized, it takes the screen height (see .gauge-max-on). */
 .gauge {
   position: relative;
   width: 100%;
-  max-width: calc((100vh - 160px) / 1);
+  /* The same size as in test drive, so GPS drive has the same layout: REV and the acceleration box left of the dial, the info box right. */
+  max-width: min(470px, max(200px, calc((100vh - 360px) / 1)));
 }
 
 #tach { width: 100%; height: auto; display: block; }
@@ -1040,3 +1039,4 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .accel-box.narrow .accel-unit { display: inline; }
 .accel-box.narrow .u { display: none; }
 .accel-box.narrow { padding: 10px; }
+.accel-box.dock .accel-reset { margin-top: auto; }
