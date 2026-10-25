@@ -1,0 +1,972 @@
+/*
+ * Svendsen Sounds
+ *
+ * Fjord ink for the page, basalt for the panels, brass for anything that is
+ * sounding (the colour of a VU meter's backlight). One typeface, Archivo,
+ * used at three widths: extended for the name, condensed for the numbers on
+ * the dial, normal for reading. Self-hosted (css/fonts), no external requests.
+ */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("fonts/archivo-latin-wdth.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0d1317;
+  --panel: #161e24;
+  --panel-2: #1f2932;
+  --panel-3: #2a3641;
+  --line: rgba(233, 238, 234, 0.1);
+  --text: #e9eeea;
+  --muted: #8d9aa3;
+  --accent: #e8b04a;       /* brass */
+  --accent-2: #f2c978;     /* brass, lit */
+  --red: #e5484d;
+  --green: #7fd6b8;        /* ok */
+  --amber: #f0883e;        /* warning */
+  --radius: 10px;
+  --radius-sm: 7px;
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+/* The Halloween car: a haunted night behind the page (a pale moon glow and
+   fog on the ground, drawn in CSS), dark enough that the gauge and text stay
+   easy to read, and showing a little through the panels. */
+body.haunted { background: transparent; }
+body.haunted::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 34% 26% at 80% 14%, rgba(196, 208, 236, 0.2), transparent 72%),
+    radial-gradient(ellipse 130% 38% at 40% 104%, rgba(98, 124, 134, 0.38), transparent 72%),
+    linear-gradient(180deg, #0a0f12, #111a1f 62%, #0d1317);
+}
+body.haunted .gauge-panel,
+body.haunted .control-panel { background: rgba(22, 30, 36, 0.84); }
+
+button {
+  font: inherit;
+  color: inherit;
+  /* No text selection or iPhone Copy / Look Up bubble when a button is held. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+/* The name: extended and heavy. It is the page's h1 (and a link on the
+   other pages), so it resets the browser's heading look. */
+.brand-name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--text);
+  text-decoration: none;
+}
+.brand-mark { width: 30px; height: 30px; color: var(--accent); flex: none; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+.chip[data-state="ok"] { color: var(--green); }
+.chip[data-state="wait"] { color: var(--accent-2); }
+.chip[data-state="bad"] { color: var(--red); }
+.chip[data-help] { cursor: pointer; border-color: var(--red); }
+.chip[data-help]::after { content: "?"; font-weight: 700; font-size: 12px; width: 18px; height: 18px; line-height: 18px; text-align: center; border-radius: 50%; border: 1px solid currentColor; }
+
+/* ---------- dashboard ---------- */
+
+.dash {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.gauge-panel,
+.control-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.gauge-col { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; }
+.gauge-col > .gauge-panel { align-self: stretch; }
+
+.gauge-panel {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  /* The dial sits on a faintly lit face, like a backlit instrument. */
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 42%, rgba(232, 176, 74, 0.07), transparent 70%),
+    var(--panel);
+  /* Holding a pedal must not select the speed / rpm text around it on iPhone. */
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+
+/* GPS drive: the dial takes all the room it has, the panel's width or the
+   screen height left over after the top bar and the throttle bar (about
+   160 px). The dial is as tall as wide. */
+.gauge {
+  position: relative;
+  width: 100%;
+  max-width: calc((100vh - 160px) / 1);
+}
+
+#tach { width: 100%; height: auto; display: block; }
+
+/* The dial follows the Porsche 911 GT3 RS cluster: a black face, a thin white rim with fine yellow marks, white
+   numbers, a red zone, a yellow needle, the speed in a dark ring in the middle and, along the bottom, the
+   Tesla's battery where the car shows its fuel with the range under it. */
+.g-face { fill: #000; }
+.tach-rim { fill: none; stroke: #f7f7f5; stroke-width: 4; }
+.tach-red { fill: #e2353d; stroke: none; }
+.tach-red-edge { fill: none; stroke: #ef5a78; stroke-width: 8; }
+.tick { stroke: #ece27f; stroke-width: 2; }
+.tick.mid { stroke-width: 2.6; }
+.tick.major { stroke: #f7f7f5; stroke-width: 5.5; }
+.tick.red:not(.major) { stroke: #ffd3d6; }
+.tick-label { fill: #fff; font-size: 34px; font-weight: 700; font-stretch: 112%; text-anchor: middle; dominant-baseline: central; font-variant-numeric: tabular-nums; }
+.tick-label.small { font-size: 25px; }
+.g-inner { fill: #000; stroke: #3a3a3f; stroke-width: 9; }
+.needle { fill: #ece06a; }
+.needle-slit { fill: #1a1a08; }
+
+.g-speed {
+  fill: #fff;
+  font-size: 92px;
+  font-weight: 700;
+  font-stretch: 122%;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-variant-numeric: tabular-nums;
+}
+.g-speed.wide { font-size: 74px; }
+.g-unit { fill: #fff; font-size: 25px; font-weight: 700; font-stretch: 104%; text-anchor: middle; }
+.g-rpm { display: none; }
+
+.batt-track { fill: none; stroke: #6c6a72; stroke-width: 9; stroke-linecap: butt; }
+.batt-fill { fill: none; stroke: #f4f4f2; stroke-width: 9; stroke-linecap: butt; transition: stroke-dasharray .4s; }
+.batt-fill.low { stroke: #e5484d; }
+.batt-end { fill: #8a8a90; font-size: 15px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+.batt-icon rect:not(.fill), .batt-icon path:not(.fill) { fill: none; stroke: #fff; stroke-width: 2; }
+.batt-icon .fill { fill: #fff; stroke: none; }
+.g-range { fill: #fff; font-size: 31px; font-weight: 700; font-stretch: 104%; text-anchor: start; dominant-baseline: central; font-variant-numeric: tabular-nums; }
+.g-range.low { fill: #ff6b6f; }
+
+.bars { width: 100%; max-width: 470px; }
+.bar { display: flex; align-items: center; gap: 12px; }
+.bar-label { color: var(--muted); font-size: 14px; width: 70px; }
+.bar-track { flex: 1; height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.bar-fill { height: 100%; width: 0; background: var(--accent); border-radius: 3px; }
+
+/* ---------- controls ---------- */
+
+.control-panel { display: flex; flex-direction: column; gap: 12px; }
+
+/* The picked car: a brass edge on the left says it is the one playing. */
+.car-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  border-left: 4px solid var(--accent);
+}
+.car-name { font-size: 20px; font-weight: 700; line-height: 1.3; }
+.car-tag { color: var(--muted); font-size: 14px; line-height: 1.4; }
+
+/* ---------- car picker ---------- */
+
+.car-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.car-picker button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 96px;
+  padding: 10px 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color .15s, color .15s;
+}
+.car-picker button:hover { border-color: rgba(232, 176, 74, 0.45); }
+.pick-art { display: block; width: 100%; }
+.pick-art img { display: none; width: 100%; height: auto; }
+.pick-art.has-photo img { display: block; }
+.pick-art.has-photo svg { display: none; }
+/* The picture's box is always there, shaped for the tallest car picture
+   (300×105), so nothing below moves while it loads or when another car is
+   picked. Wider pictures sit on its bottom edge. */
+.car-hero { max-width: 420px; aspect-ratio: 20 / 7; margin: 14px auto 14px; position: relative; z-index: 1; pointer-events: none; }
+.car-hero img {
+  display: block; width: 100%; height: 100%;
+  object-fit: contain; object-position: center bottom;
+  opacity: 0; transition: opacity 0.2s;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5));
+}
+.car-hero.has-photo img { opacity: 1; }
+.car-hero svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; fill: var(--panel-3); }
+.car-hero svg .glass { fill: var(--panel); }
+.car-hero svg .wheel { fill: var(--panel); stroke: var(--panel-3); stroke-width: 4; }
+.car-picker svg, .cars-grid svg { width: 100%; max-width: 150px; height: auto; fill: currentColor; }
+.car-picker svg .glass, .cars-grid svg .glass { fill: var(--panel-2); opacity: 0.85; }
+.car-picker svg .wheel, .cars-grid svg .wheel { fill: var(--panel-2); stroke: currentColor; stroke-width: 4; }
+.car-picker .pick-name { font-size: 14px; font-weight: 600; line-height: 1.2; text-align: center; }
+.car-picker button[aria-checked="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+.car-picker button[aria-checked="true"] svg { color: var(--accent); }
+
+/* The key that starts the engine. */
+.start-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 76px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #1a1305;
+  font-size: 25px;
+  font-weight: 750;
+  font-stretch: 112%;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background .15s;
+}
+.start-btn:hover { background: var(--accent-2); }
+.start-btn:active { transform: translateY(1px); }
+.start-btn.on { background: var(--panel-3); color: var(--text); }
+.start-ring { width: 22px; height: 22px; border-radius: 50%; border: 3px solid currentColor; }
+.start-btn.on .start-ring { background: var(--red); border-color: var(--red); box-shadow: 0 0 12px var(--red); }
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.segmented button {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.segmented button[aria-checked="true"],
+.segmented button[aria-pressed="true"] { background: var(--panel-3); color: var(--text); box-shadow: inset 0 -2px 0 var(--accent); }
+.segmented[hidden] { display: none; }
+.segmented.small button { min-height: 40px; font-size: 15px; padding: 0 14px; }
+
+/* Test-drive pedals under the throttle bar: a wide, short brake and a taller
+   gas pedal in brushed aluminum, standing on the same floor line. Kept low so
+   the dial, bar and pedals all fit the car's split-screen browser. The lower
+   the finger on a pedal, the harder it presses. */
+.pedals {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 28px;
+}
+.pedal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: none;
+}
+.pedal.active { color: var(--accent-2); }
+.pedal-plate {
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 14px 10px;
+  overflow: hidden;
+  border-radius: 14px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, rgba(0, 0, 0, 0.04) 1px 2px, transparent 2px 4px),
+    linear-gradient(165deg, #f1f3f5, #c9ced4 40%, #a3aab3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -3px 4px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.55);
+  transition: transform 0.08s;
+}
+.pedal-brake .pedal-plate { width: 156px; height: 92px; padding: 12px 10px; border-radius: 14px 14px 14px 32px / 14px 14px 14px 24px; }
+.pedal-gas .pedal-plate { width: 96px; height: 120px; padding: 12px 10px; }
+.pedal-plate i {
+  width: 7px;
+  border-radius: 4px;
+  background: #23262c;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+/* How hard the pedal is pressed: brass from the top down to the finger. */
+.pedal-plate::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--press, 0) * 100%);
+  background: linear-gradient(180deg, rgba(232, 176, 74, 0.12), rgba(232, 176, 74, 0.5));
+  border-bottom: 2px solid var(--accent);
+  opacity: 0;
+}
+.pedal.active .pedal-plate { transform: translateY(2px) scale(0.98); }
+.pedal.active .pedal-plate::after { opacity: 1; }
+.pedal-note { max-width: 400px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; text-align: center; }
+/* Test drive: the dial gets the screen height the pedals leave over, so the
+   whole panel fits without scrolling (about 260 px wide on the car's split
+   screen, 592 px high). The rest of the panel takes about 360 px. */
+.mode-demo .gauge { max-width: min(470px, max(200px, calc((100vh - 360px) / 1))); }
+body:not(.mode-demo) .demo-only { display: none; }
+
+.pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 84px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  font-size: 22px;
+  font-weight: 750;
+  font-stretch: 112%;
+  cursor: pointer;
+  touch-action: none;
+}
+.pad small { font-size: 12px; font-weight: 500; font-stretch: 100%; color: var(--muted); }
+.pad.active { transform: scale(0.98); }
+.pad-rev {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 76px);
+  left: 16px;
+  z-index: 20;
+  display: none;
+  width: 150px;
+  min-height: 110px;
+  background: rgba(22, 30, 36, 0.9);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.pad-rev.shown { display: flex; }
+.pad-rev.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); }
+.pad:disabled { opacity: 0.4; }
+.mode-demo .pad-rev small { display: none; }
+
+.ghost-btn {
+  min-height: 48px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: transparent;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.ghost-btn.running { border-color: var(--accent); color: var(--accent-2); }
+
+.status { min-height: 22px; color: var(--muted); font-size: 15px; }
+.status.warn { color: var(--amber); }
+.status.error { color: var(--red); }
+
+.settings { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; border-top: 1px solid var(--line); }
+
+.slider { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 12px; font-size: 15px; color: var(--muted); }
+.slider span { display: flex; justify-content: space-between; }
+.slider output { color: var(--text); font-variant-numeric: tabular-nums; }
+.slider[hidden] { display: none; }
+.field { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; color: var(--muted); padding: 2px 0; }
+.field-input { display: flex; align-items: center; gap: 8px; }
+.field-input input { width: 92px; min-height: 40px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font: inherit; font-variant-numeric: tabular-nums; text-align: right; }
+.field-input i { font-style: normal; }
+.batt-set { display: flex; flex-direction: column; gap: 8px; padding: 6px 0 4px; color: var(--muted); font-size: 15px; }
+.batt-set-title { color: var(--text); font-weight: 600; }
+.batt-set-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.batt-set-row .field-input input { width: 80px; }
+.small-btn { min-height: 44px; padding: 0 18px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.small-btn:hover { border-color: rgba(232, 176, 74, 0.55); }
+.batt-set .hint { margin: 0; }
+.batt-set .hint.warn { color: var(--red); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  touch-action: pan-y;
+}
+input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: var(--panel-3); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 5px solid var(--accent);
+}
+input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--panel-3); }
+input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--text); border: 5px solid var(--accent); }
+
+.units { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 15px; padding-top: 4px; }
+
+/* "More settings": one row under Volume that opens and closes the rest. */
+.more-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-height: 48px; margin: 4px 0; padding: 0 16px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: transparent;
+  color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer; touch-action: manipulation;
+  transition: border-color .2s;
+}
+.more-btn::after { content: ''; width: 8px; height: 8px; border: solid var(--accent-2); border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform .25s; }
+.more-btn:hover { border-color: rgba(232, 176, 74, .45); }
+.more-btn[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
+.more-settings { display: flex; flex-direction: column; gap: 4px; }
+.more-settings[hidden] { display: none; }
+
+.hint { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+.diag { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 15px; }
+.diag li { display: flex; gap: 10px; align-items: baseline; }
+.diag .ok { color: var(--green); }
+.diag .bad { color: var(--red); }
+.diag .warn { color: var(--amber); }
+.diag .muted { color: var(--muted); }
+
+/* ---------- questions ---------- */
+
+.faq { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 12px 0; font-weight: 600; cursor: pointer; list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--accent-2); font-weight: 700; }
+.faq[open] summary::after { content: '\2013'; }
+.faq p { margin: 0 0 14px; }
+
+/* ---------- help at the fold ---------- */
+
+.help { max-width: 1400px; margin: 8px auto 0; padding: 0 20px; }
+.help-intro { max-width: 62ch; margin: 0 0 14px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+.help-intro a { color: var(--accent-2); }
+.help-links { display: flex; flex-wrap: wrap; gap: 4px 28px; padding: 6px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.help-links a, .help-tab {
+  display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0;
+  border: 0; background: none;
+  color: var(--muted); font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; touch-action: manipulation;
+  transition: color .2s;
+}
+.help-tab { color: var(--text); }
+.help-tab::after { content: ''; width: 7px; height: 7px; border: solid var(--accent-2); border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform .25s; }
+.help-links a:hover, .help-tab:hover { color: var(--accent-2); }
+.help-tab[aria-expanded="true"] { color: var(--accent-2); }
+.help-tab[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
+.help-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 48px; padding: 22px 0 30px; border-bottom: 1px solid var(--line); animation: help-in .3s cubic-bezier(.2, .7, .2, 1) both; }
+.help-panel[hidden] { display: none; }
+.help-wide { display: block; }
+.help-panel h2 { margin: 8px 0 12px; font-size: 18px; font-weight: 700; }
+.help-steps { margin: 0; padding-left: 22px; line-height: 1.7; max-width: 62ch; }
+.help-know { margin: 0; padding-left: 20px; color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 62ch; }
+.help-faq { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; align-items: start; }
+.help-faq .faq p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+@keyframes help-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .help-panel { animation: none; } }
+@media (max-width: 860px) {
+  .help { padding: 0 16px; }
+  .help-panel, .help-faq { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .topbar { flex-wrap: wrap; row-gap: 10px; }
+  .brand { gap: 10px; }
+  .brand-name { font-size: 16px; font-stretch: 112%; white-space: nowrap; }
+  .brand-mark { width: 26px; height: 26px; }
+  .chips { justify-content: flex-start; gap: 6px; }
+  .chip { font-size: 12px; padding: 5px 9px; }
+  .slider { grid-template-columns: 112px 1fr; }
+}
+
+@media (max-width: 860px) and (orientation: portrait) {
+  .gauge, .mode-demo .gauge { max-width: min(470px, 40vh); }
+}
+
+/* Stack only in portrait: the car screen is landscape but under 860 CSS px wide. */
+@media (max-width: 860px) and (orientation: portrait) {
+  .dash { grid-template-columns: 1fr; padding: 16px; }
+  .topbar { padding: 12px 16px; }
+}
+
+/* ---------- maximized gauge ---------- */
+
+/* The round button in the gauge panel's top right corner, which the dial
+   leaves empty. */
+.gauge-max {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.gauge-max:hover { color: var(--text); border-color: rgba(232, 176, 74, 0.55); }
+.gauge-max svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gauge-max .ico-min, .gauge-max-on .gauge-max .ico-max { display: none; }
+.gauge-max-on .gauge-max .ico-min { display: block; }
+
+/* Maximized: the gauge column takes the full width and the controls move
+   down under it, as when the panels stack in portrait. The dial still fits
+   the screen height as in GPS drive (.gauge above), also in portrait and in
+   test drive, where it drops the 470 px cap. */
+.gauge-max-on .dash { grid-template-columns: minmax(0, 1fr); }
+.gauge-max-on .gauge { max-width: calc((100vh - 160px) / 1); }
+.gauge-max-on.mode-demo .gauge { max-width: max(200px, calc((100vh - 360px) / 1)); }
+
+/* ---------- links, windows ---------- */
+
+.link-btn {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: var(--accent-2);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(6, 10, 12, 0.84);
+  backdrop-filter: blur(6px);
+}
+.modal[hidden] { display: none; }
+/* While the cars window is open the page behind it does not scroll, and a
+   list that reaches its end does not hand the scroll on to the page. */
+html.no-scroll, html.no-scroll body { overflow: hidden; }
+.modal, .modal-card, .my-cars-list, .cars-grid, .cars-split { overscroll-behavior: contain; }
+
+.modal-card {
+  position: relative;
+  width: min(440px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 28px 28px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  text-align: left;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.modal-card h2 { margin: 0 0 6px; font-size: 24px; font-weight: 750; font-stretch: 112%; padding-right: 44px; }
+.modal-lead { margin: 0 0 16px; color: var(--muted); font-size: 16px; line-height: 1.5; }
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+.modal-close:hover { color: var(--text); }
+
+.help-card h3 { margin: 16px 0 4px; font-size: 16px; }
+.help-card ol { margin: 0; padding-left: 22px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.pay-hint { margin: 16px 0 0; font-size: 15px; line-height: 1.45; color: var(--muted); }
+
+/* ---------- footer and text pages ---------- */
+
+.foot-links { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+.foot-links a, .legal a, .faq a { color: var(--accent-2); }
+
+.foot-made {
+  max-width: 1400px;
+  margin: 28px auto 0;
+  padding: 24px 20px 36px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.foot-made p { margin: 0 0 10px; max-width: 70ch; }
+.made-line { display: flex; align-items: center; gap: 10px; color: var(--text); }
+.made-line span { font-size: 16px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.01em; }
+.made-mark { width: 24px; height: 24px; flex: none; color: var(--accent); }
+.foot-made .foot-links { margin: 0 0 14px; }
+.foot-made .foot-links a { display: inline-block; padding: 6px 0; color: var(--text); text-decoration: none; }
+.foot-made .foot-links a:hover { color: var(--accent-2); }
+.made-legal { font-size: 13px; }
+
+.legal { max-width: 760px; margin: 0 auto; padding: 36px 20px 60px; line-height: 1.65; }
+.legal h1 { margin: 0 0 6px; font-size: 34px; font-weight: 800; font-stretch: 112%; letter-spacing: -0.015em; line-height: 1.15; }
+.legal h2 { margin: 30px 0 6px; font-size: 19px; font-weight: 700; }
+.legal p, .legal li { color: var(--muted); }
+.legal p { max-width: 68ch; }
+.legal ul { padding-left: 22px; }
+.legal .updated { font-size: 15px; }
+.legal b { color: var(--text); }
+
+@media (max-width: 860px) and (orientation: portrait) {
+  .foot-made { padding: 20px 16px 28px; }
+}
+
+/* ---------- location warning ---------- */
+.gps-warn {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-bottom: 12px; padding: 12px 14px;
+  border: 1px solid var(--amber); border-left-width: 4px; border-radius: var(--radius-sm);
+  background: rgba(240, 136, 62, 0.09);
+  color: var(--text); font-size: 15px; line-height: 1.4;
+}
+.gps-warn[hidden] { display: none; }
+.gps-warn strong { color: var(--amber); }
+.gps-warn .link-btn { align-self: flex-start; padding-left: 0; }
+.important { color: var(--amber); }
+
+/* ---------- "Show all cars" ---------- */
+.car-picker .pick-all {
+  justify-content: center;
+  border-style: dashed;
+  background: transparent;
+}
+.all-plus { font-size: 30px; line-height: 1; font-weight: 300; color: var(--muted); }
+.car-picker .pick-name small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; }
+/* A pinned car whose sound isn't made yet. */
+.car-picker .pick-later { opacity: 0.6; cursor: default; }
+
+.cars-card { width: min(760px, 100%); }
+.cars-col h3 { margin: 0; font-size: 16px; text-align: left; }
+.cars-col-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 8px; }
+.cars-sort { flex: none; margin-left: auto; }
+.cars-sort button { min-height: 40px; }
+.cars-split { display: block; }
+.my-cars-list { display: flex; flex-direction: column; gap: 6px; }
+.my-car {
+  display: flex;
+  user-select: none;
+  -webkit-user-select: none;
+  /* A press on the row drags it at once, so the browser must not pan. */
+  touch-action: none;
+  cursor: grab;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid rgba(232, 176, 74, 0.6);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  background: rgba(232, 176, 74, 0.09);
+  text-align: left;
+}
+.my-car.dragging {
+  position: relative;
+  z-index: 3;
+  cursor: grabbing;
+  background: rgba(232, 176, 74, 0.2);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+}
+.my-car .pick-art { width: 92px; flex: none; }
+.my-car svg, .my-car img { width: 100%; height: auto; }
+.my-car svg { fill: currentColor; color: var(--muted); }
+.my-car svg .glass { fill: var(--panel-2); opacity: 0.85; }
+.my-car svg .wheel { fill: var(--panel-2); stroke: currentColor; stroke-width: 4; }
+.my-car .all-name { flex: 1; min-width: 0; }
+.my-move { display: flex; gap: 6px; flex: none; }
+.my-move button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.my-move button:disabled { opacity: 0.3; cursor: default; }
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.all-car {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.all-name { color: var(--text); font-size: 15px; font-weight: 700; line-height: 1.2; }
+.all-tag { font-size: 12px; line-height: 1.35; }
+.all-badge {
+  margin-top: auto;
+  padding: 2px 10px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.all-car[hidden] { display: none; }
+/* Your front page on the left, the cars to add on the right. Each column
+   scrolls by itself, so the window stays inside a 600 px-tall screen. */
+.cars-card.is-pro {
+  width: min(1000px, 100%);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 568px;
+  overflow: hidden;
+  padding: 14px 18px 10px;
+}
+/* No title row: the column headings are the top line, and the close button
+   sits on it, right of the sort buttons. The h2 stays for screen readers. */
+.cars-card.is-pro .modal-close { top: 17px; right: 12px; }
+.cars-card.is-pro h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cars-card.is-pro .cars-col-head { padding-right: 44px; }
+.cars-card.is-pro .cars-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; min-height: 0; }
+.cars-card.is-pro .cars-col { display: flex; flex-direction: column; min-height: 0; }
+.cars-card.is-pro .cars-col > h3 { margin: 0 0 8px; min-height: 50px; display: flex; align-items: center; }
+.cars-card.is-pro .my-cars-list,
+.cars-card.is-pro .cars-grid { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
+.cars-card.is-pro .cars-grid { display: flex; flex-direction: column; gap: 6px; }
+.cars-card.is-pro .all-car {
+  flex-direction: row;
+  gap: 10px;
+  padding: 6px 10px;
+  text-align: left;
+  min-height: 56px;
+  cursor: default;
+}
+.cars-card.is-pro .all-car .pick-art { width: 92px; flex: none; }
+.cars-card.is-pro .all-car svg, .cars-card.is-pro .all-car img { max-width: 92px; }
+.cars-card.is-pro .all-name { flex: 1; min-width: 0; }
+.cars-card.is-pro .all-tag { display: none; }
+/* The Add button is the only thing in the row that adds the car. */
+.cars-card.is-pro .all-badge {
+  margin: 0;
+  flex: none;
+  min-width: 84px;
+  min-height: 44px;
+  padding: 0 14px;
+  color: var(--accent-2);
+  font-size: 15px;
+}
+.cars-card.is-pro .cars-hint { margin: 6px 0 0; min-height: 18px; }
+.cars-empty { margin: 8px 0 0; max-width: 34ch; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.cars-hint { min-height: 20px; margin: 12px 0 0; color: var(--accent-2); font-size: 14px; }
+@media (max-width: 700px) {
+  /* One column: each column is as tall as its cars and the window scrolls,
+     so a list never spills over the one below it. */
+  .cars-card.is-pro .cars-split { grid-template-columns: minmax(0, 1fr); grid-auto-rows: max-content; overflow-y: auto; }
+  .cars-card.is-pro .cars-col { min-height: auto; }
+  /* One column: the front-page heading is the top line, so it makes room for ×. */
+  .cars-card.is-pro .cars-col > h3 { padding-right: 44px; }
+  .cars-card.is-pro .my-cars-list, .cars-card.is-pro .cars-grid { overflow: visible; }
+}
+@media (max-width: 520px) {
+  .cars-card { padding: 24px 14px 16px; }
+  .cars-card.is-pro { padding: 14px 12px 10px; }
+  /* Phone width: smaller pictures, so the arrows and ✕ fit next to the name. */
+  .my-car .pick-art, .cars-card.is-pro .all-car .pick-art { width: 64px; }
+  .my-move { gap: 4px; }
+  .cars-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+}
+
+/* ---- Code screen (the locked front page) ---- */
+.lock {
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 12vh 24px 48px;
+  text-align: center;
+}
+.lock h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: -0.01em;
+}
+.lock-lead { margin: 0 0 26px; color: var(--muted); }
+.lock form { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+.lock-label {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.lock-pin {
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 24px;
+  letter-spacing: 0.4em;
+  text-align: center;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-3);
+  border-radius: var(--radius);
+}
+.lock-pin:focus { outline: 2px solid var(--accent); outline-offset: 2px; border-color: transparent; }
+.lock-keep { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.lock-keep input { accent-color: var(--accent); width: 16px; height: 16px; }
+.lock-btn {
+  padding: 13px 16px;
+  font: inherit;
+  font-weight: 700;
+  color: #1a1305;
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.lock-btn:hover:not(:disabled) { background: var(--accent-2); }
+.lock-btn:disabled { opacity: 0.5; cursor: default; }
+.lock-msg { min-height: 1.4em; margin: 0; font-size: 14px; color: var(--muted); text-align: center; }
+.lock-msg.bad { color: var(--red); }
+
+/* ---- Response and phone sensor ---- */
+.response-row { padding: 0 0 2px; }
+.response-hint { margin: 6px 0 14px; font-size: 13.5px; line-height: 1.45; }
+.phone-row { padding: 0 0 12px; gap: 12px; }
+.phone-row small { color: var(--accent); font-size: 13px; margin-left: 4px; }
+.ghost-btn.small { min-height: 40px; padding: 0 16px; font-size: 15px; width: auto; flex: none; }
+.link-qr { width: min(240px, 70%); margin: 4px auto 16px; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
+.link-qr svg { display: block; width: 100%; height: auto; }
+.help-card ol { color: var(--muted); line-height: 1.55; padding-left: 20px; }
+.link-url { margin: 4px 0 12px; font-size: 13px; color: var(--muted); word-break: break-all; text-align: center; }
+.link-status { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 14px; font-weight: 650; }
+.link-status .dot { width: 11px; height: 11px; border-radius: 50%; background: #58636b; flex: none; }
+.link-status .dot.ok { background: var(--green); box-shadow: 0 0 10px rgba(127, 214, 184, 0.7); }
+.link-status .dot.wait { background: var(--accent); }
+.link-actions { display: flex; gap: 10px; }
+.link-actions .ghost-btn { flex: 1; }
+.chip[hidden] { display: none; }
+
+/* Launch: a switch for cars with recorded sound; sits under the Rev pedal. */
+.pad-launch {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 198px);
+  left: 16px;
+  z-index: 20;
+  display: none;
+  width: 150px;
+  min-height: 84px;
+  background: rgba(22, 30, 36, 0.9);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.pad-launch.shown { display: flex; }
+.pad-launch.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(232, 176, 74, 0.35), 0 8px 24px rgba(0, 0, 0, 0.5); }
