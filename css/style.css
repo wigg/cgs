@@ -1027,3 +1027,16 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .swatch-custom { background: conic-gradient(#ff4d4d, #ffd24d, #5be37d, #3fe0e0, #4da3ff, #a78bfa, #ff4d4d); overflow: hidden; }
 .swatch-custom input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
 .car-order-hint { font-size: 13px; margin: 6px 2px 0; text-align: center; }
+
+/* Acceleration box: looks like the GPS info box. Top left under REV on a wide screen, a block under the info box otherwise. */
+.accel-box { flex-direction: column; align-items: stretch; gap: 8px; margin-top: 10px; }
+.accel-box.dock { position: absolute; left: 16px; margin-top: 0; z-index: 5; }
+.accel-title { font-size: 16px; font-weight: 700; line-height: 1.1; }
+.accel-list { gap: 6px; flex: none; }
+.accel-list dd.run { color: var(--accent); }
+.accel-reset { width: 100%; min-height: 38px; }
+.accel-list dt { white-space: nowrap; }
+.accel-unit { display: none; font-size: 12px; font-weight: 500; color: var(--muted); }
+.accel-box.narrow .accel-unit { display: inline; }
+.accel-box.narrow .u { display: none; }
+.accel-box.narrow { padding: 10px; }
