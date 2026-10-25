@@ -432,6 +432,7 @@ body:not(.mode-demo) .demo-only { display: none; }
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 .pad-rev.shown { display: flex; }
+.pad-rev.dock { position: absolute; left: 16px; z-index: 5; box-shadow: none; }
 .pad-rev.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); }
 .pad:disabled { opacity: 0.4; }
 .mode-demo .pad-rev small { display: none; }
