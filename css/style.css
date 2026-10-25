@@ -176,14 +176,14 @@ button {
 .tach-rim { fill: none; stroke: #f7f7f5; stroke-width: 4; }
 .tach-red { fill: #e2353d; stroke: none; }
 .tach-red-edge { fill: none; stroke: #ef5a78; stroke-width: 8; }
-.tick { stroke: #ece27f; stroke-width: 2; }
+.tick { stroke: var(--gauge-tick, #ece27f); stroke-width: 2; }
 .tick.mid { stroke-width: 2.6; }
 .tick.major { stroke: #f7f7f5; stroke-width: 5.5; }
 .tick.red:not(.major) { stroke: #ffd3d6; }
 .tick-label { fill: #fff; font-size: 34px; font-weight: 700; font-stretch: 112%; text-anchor: middle; dominant-baseline: central; font-variant-numeric: tabular-nums; }
 .tick-label.small { font-size: 25px; }
 .g-inner { fill: #000; stroke: #3a3a3f; stroke-width: 9; }
-.needle { fill: #ece06a; }
+.needle { fill: var(--gauge-needle, #ece06a); }
 .needle-slit { fill: #1a1a08; }
 
 .g-speed {
@@ -1002,3 +1002,10 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .info-box.float .info-list div { flex-direction: column; align-items: flex-start; gap: 0; }
 .info-box.float .info-list dd { text-align: left; }
 .info-box.float .info-list { gap: 6px; }
+
+.color-set { display: flex; flex-direction: column; gap: 8px; padding: 6px 0 4px; color: var(--muted); font-size: 15px; }
+.color-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.swatch { width: 36px; height: 36px; border-radius: 50%; border: 3px solid transparent; box-shadow: 0 0 0 1px var(--line); cursor: pointer; padding: 0; touch-action: manipulation; position: relative; }
+.swatch[aria-pressed="true"] { border-color: var(--bg, #0e1317); box-shadow: 0 0 0 3px #fff; }
+.swatch-custom { background: conic-gradient(#ff4d4d, #ffd24d, #5be37d, #3fe0e0, #4da3ff, #a78bfa, #ff4d4d); overflow: hidden; }
+.swatch-custom input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
