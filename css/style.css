@@ -1386,3 +1386,74 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .gd-card dd { margin: 0; color: #d8e2ea; font-size: 14px; line-height: 1.45; }
 .gd-steps, .gd-notes { color: #d8e2ea; font-size: 14.5px; line-height: 1.55; padding-left: 22px; display: grid; gap: 7px; }
 .gd-steps b { color: #fff; }
+
+/* ---- v49: track name, next corner, options, track settings, big mode ---- */
+.race-main > .race-track, .race-main > .race-next { grid-column: 1 / -1; }
+.race-track { color: #b4c1cb; font-size: 13px; font-weight: 650; letter-spacing: 0.02em; min-height: 0; }
+.race-track:empty { display: none; }
+.race-next { padding: 9px 12px; border: 1px solid #2a3641; border-radius: 9px; background: #0d1317; font-weight: 750; font-size: clamp(15px, 2vw, 20px); font-variant-numeric: tabular-nums; color: #cfd8df; letter-spacing: 0.01em; }
+.race-next[hidden] { display: none; }
+.race-next[data-s="near"] { border-color: var(--accent); color: var(--accent-2); }
+.race-next[data-s="zone"] { border-color: #ff5a4d; background: rgba(255, 90, 77, 0.16); color: #ffb3ab; }
+.race-opts { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); padding: 0 12px; }
+.race-opts > summary { cursor: pointer; min-height: 38px; display: flex; align-items: center; color: var(--muted); font-size: 13.5px; font-weight: 650; list-style: none; }
+.race-opts > summary::-webkit-details-marker { display: none; }
+.race-opts > summary::after { content: ''; margin-left: auto; width: 7px; height: 7px; border: solid var(--accent-2); border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform .2s; }
+.race-opts[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+.ro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; padding: 4px 0 8px; }
+.ro-grid label { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: #cdd7de; min-height: 30px; }
+.ro-grid input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+.ro-btns { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 8px; }
+.race-opts .rs-note { margin: 0 0 10px; }
+
+/* Big text mode: only the lap time, delta, sectors, next corner and the buttons */
+.view-race .race.race-big .race-map, .view-race .race.race-big .race-side, .view-race .race.race-big .race-secs small, .view-race .race.race-big .race-track { display: none; }
+.view-race .race.race-big { margin-top: 56px; }
+.race.race-big .race-main { grid-template-columns: 1fr; gap: 12px; }
+.race.race-big .race-lap { align-items: center; }
+.race.race-big .race-time { font-size: clamp(56px, 8.5vw, 120px); text-align: center; }
+.race.race-big .race-delta { text-align: center; }
+.race.race-big .race-delta-val { font-size: clamp(48px, 10vw, 110px); }
+.race.race-big .race-secs .sec b { font-size: clamp(24px, 5vw, 46px); }
+.race.race-big .race-next { font-size: clamp(22px, 4.4vw, 40px); text-align: center; padding: 14px; }
+.race.race-big .race-btns .rbtn { min-height: 64px; font-size: 20px; }
+.race.race-big .race-state { font-size: 16px; }
+
+.rt-card { max-width: 980px; }
+.rt-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.rt-item { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-height: 44px; padding: 6px 14px; border: 1px solid #28313b; border-radius: 8px; background: #11161c; color: #d8e2ea; font: inherit; cursor: pointer; text-align: left; }
+.rt-item small { color: #8d9aa3; font-size: 12px; }
+.rt-item:hover { border-color: var(--accent); }
+.rt-item.on { border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); background: #161d25; }
+.rt-main { display: grid; gap: 10px; }
+.rt-name { display: flex; align-items: center; gap: 10px; color: #8d9aa3; font-size: 13px; }
+.rt-name input { flex: 1; max-width: 340px; min-height: 36px; padding: 0 10px; border: 1px solid #28313b; border-radius: 6px; background: #0b1015; color: #fff; font: inherit; font-size: 15px; }
+.rt-canvas { width: 100%; display: block; border: 1px solid #232a32; border-radius: 8px; background: #080c11; }
+.rt-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 24px; }
+.rt-row label { display: grid; gap: 4px; color: #8d9aa3; font-size: 13px; }
+.rt-row label b { color: #fff; font-weight: 650; font-variant-numeric: tabular-nums; }
+.rt-row input[type=range] { width: 100%; accent-color: var(--accent); }
+.rt-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Trainer extras */
+.tr-conf { display: flex; gap: 10px; align-items: flex-start; padding: 9px 12px; border: 1px solid #232a32; border-radius: 8px; background: #0e1217; color: #9fb0bd; font-size: 13px; line-height: 1.45; margin-bottom: 10px; }
+.tr-conf .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: #555; }
+.tr-conf.good .dot { background: #3ee67a; } .tr-conf.ok .dot { background: #ffd21a; } .tr-conf.work .dot { background: #ff5a4d; }
+.tr-conf b { color: #fff; }
+.tr-prog { width: 100%; display: block; border: 1px solid #232a32; border-radius: 8px; background: #080c11; }
+.tr-tgt td, .tr-tgt th { text-align: right; }
+.tr-tgt th:first-child, .tr-tgt td:first-child { text-align: left; }
+.tf-tgt { margin: 2px 0 6px; color: #9fc7ff; font-size: 13px; line-height: 1.45; }
+
+/* ---- use at your own risk ---- */
+.risk-note { margin: 10px 4px 0; color: var(--muted); font-size: 12.5px; line-height: 1.45; text-align: center; }
+.risk-note a { color: var(--accent-2); }
+.risk-card { max-width: 560px; }
+.risk-list { margin: 8px 0 12px; padding-left: 20px; display: grid; gap: 7px; color: #cdd7de; font-size: 14.5px; line-height: 1.5; }
+.risk-check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; color: #e9eeea; margin: 8px 0 14px; }
+.risk-check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.risk-check a { color: var(--accent-2); }
+.risk-btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.risk-ok { min-height: 46px; padding: 0 20px; border: 0; border-radius: 10px; background: var(--accent); color: #1b1305; font: inherit; font-size: 16px; font-weight: 750; cursor: pointer; }
+.risk-ok:disabled { opacity: 0.4; cursor: default; }
+.risk-ok:hover:not(:disabled) { background: var(--accent-2); }
