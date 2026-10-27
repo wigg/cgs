@@ -1563,6 +1563,8 @@ body.moto .lean-g { display: block; }
 .lb-tabs button { min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--muted); font-weight: 700; font-size: 15px; cursor: pointer; }
 .lb-tabs button small { font-weight: 500; font-size: 11px; }
 .lb-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(255,176,32,.12); }
+.lb-cats { margin-bottom: 6px; }
+.lb-cats button { min-height: 36px; font-size: 13px; padding: 0 2px; }
 .lb-who { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
 .lb-who b { color: var(--text); }
 .lb-msg.bad { color: #ff9c9c; }
