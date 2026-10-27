@@ -1549,3 +1549,26 @@ body.moto .lean-g { display: block; }
 .lean-hist .lh-r i { background: #ffb020; }
 .lean-hist .lh em { font-style: normal; color: var(--muted); min-width: 28px; font-variant-numeric: tabular-nums; }
 .lean-hist .lh-l em { text-align: right; }
+
+/* ---------- v53: acceleration leaderboard ---------- */
+.accel-box.dock .accel-lb, .accel-lb { margin-top: 0; }
+.accel-save { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(255,176,32,.12) !important; font-weight: 700; }
+.accel-save[hidden], .accel-lb[hidden] { display: none; }
+.accel-msg { margin: 0; font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+.accel-msg[hidden] { display: none; }
+.lb-card { max-width: 560px; }
+.lb-mode { margin-left: auto; margin-right: 40px; font-size: 12px; font-weight: 650; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.lb-mode.on { color: #2fe05a; border-color: rgba(47,224,90,.4); }
+.lb-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 4px 0 10px; }
+.lb-tabs button { min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--muted); font-weight: 700; font-size: 15px; cursor: pointer; }
+.lb-tabs button small { font-weight: 500; font-size: 11px; }
+.lb-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(255,176,32,.12); }
+.lb-who { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
+.lb-who b { color: var(--text); }
+.lb-msg.bad { color: #ff9c9c; }
+.lb-tbl td.lb-t { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; white-space: nowrap; }
+.lb-tbl th:last-child { text-align: right; }
+.lb-tbl tr.me td { background: rgba(255,176,32,.14); }
+.lb-foot { margin-top: 8px; text-align: right; }
+.lb-f { display: grid; gap: 4px; margin: 0 0 10px; font-size: 13.5px; color: var(--muted); }
+.lb-f input, .lb-f select { width: 100%; box-sizing: border-box; min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--text); font-size: 16px; padding: 0 10px; }
