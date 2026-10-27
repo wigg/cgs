@@ -4,7 +4,7 @@
  * Everything else (sounds, styles, map code) is served from the saved copy at once and refreshed in the background.
  * Map pictures from other sites are not saved.
  */
-var VERSION = 'svs-v53';
+var VERSION = 'svs-v54';
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(VERSION).then(function (c) { return c.add('index.html').catch(function () {}); }).then(function () { return self.skipWaiting(); }));
