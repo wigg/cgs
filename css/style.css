@@ -1771,3 +1771,12 @@ body:not(.view-race) .bars { display: none; }
 .fs-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .fs-btn .ico-min, .fs-btn.on .ico-max { display: none; }
 .fs-btn.on .ico-min { display: block; }
+
+/* Full screen: only the instrument box, filling the screen (no top bar, no notes, no footer). */
+body.fs-on .topbar, body.fs-on .drive-top, body.fs-on .drive-pads, body.fs-on .obd-live, body.fs-on .foot, body.fs-on .pedal-note, body.fs-on #demoBtn, body.fs-on .demo-note { display: none !important; }
+body.fs-on .dash { max-width: none; padding: 8px; }
+body.fs-on .gauge-col { gap: 0; }
+body.fs-on .gauge-panel { min-height: calc(100vh - 16px); min-height: calc(100dvh - 16px); }
+body.fs-on .gauge { max-width: min(calc(100vh - 110px), 100%); }
+body.fs-on.mode-demo .gauge { max-width: min(calc(100vh - 250px), 100%); }
+body.fs-on.view-race .gauge { max-width: none; }
