@@ -1750,3 +1750,24 @@ body.tab-drive .help, body.tab-drive .foot-made { display: none; }
 .obd-tile b { font-size: 22px; font-variant-numeric: tabular-nums; font-weight: 750; }
 .obd-tile em { font-style: normal; font-size: 12px; color: var(--muted); margin-left: 4px; }
 .obd-tile.stale b { color: var(--muted); }
+/* v59: the two boxes beside the dial are sized by app.js; the old 470px cap squeezed them and put the round cut in the wrong place */
+.accel-box.dock, .info-box.float { max-width: none; }
+
+/* v61: brake (left, red) and throttle (right, blue) as arcs round the dial, 0 at the bottom and 100 % at the top. */
+.pedal-arcs { position: absolute; left: -13.636%; top: -13.636%; width: 127.273%; height: 127.273%; pointer-events: none; overflow: visible; z-index: 1; }
+.pa-track, .pa-fill { fill: none; stroke-width: 16; stroke-linecap: round; }
+.pa-track { stroke: rgba(255, 255, 255, 0.09); }
+.pa-brake { stroke: #ff3b30; filter: drop-shadow(0 0 5px rgba(255, 59, 48, 0.55)); }
+.pa-thr { stroke: #2f80ff; filter: drop-shadow(0 0 5px rgba(47, 128, 255, 0.55)); }
+.pa-lab { fill: rgba(255, 255, 255, 0.85); font-size: 10px; font-weight: 800; letter-spacing: 0.16em; }
+body:not(.view-race) .bars { display: none; }
+.view-race .pedal-arcs { display: none; }
+
+/* v61: full screen button, top right of the instrument panel (hidden where the browser has no full screen). */
+.fs-btn { position: absolute; top: 12px; right: 12px; z-index: 7; display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--muted); cursor: pointer; touch-action: manipulation; }
+.fs-btn[hidden] { display: none; }
+.fs-btn:hover { color: var(--text); border-color: rgba(255, 128, 0, 0.55); }
+.fs-btn.on { color: #FF8000; border-color: rgba(255, 128, 0, 0.55); }
+.fs-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fs-btn .ico-min, .fs-btn.on .ico-max { display: none; }
+.fs-btn.on .ico-min { display: block; }
