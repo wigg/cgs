@@ -1584,3 +1584,40 @@ body.moto .lean-g { display: block; }
 .lb-foot { margin-top: 8px; text-align: right; }
 .lb-f { display: grid; gap: 4px; margin: 0 0 10px; font-size: 13.5px; color: var(--muted); }
 .lb-f input, .lb-f select { width: 100%; box-sizing: border-box; min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--text); font-size: 16px; padding: 0 10px; }
+
+/* ---------- v55: two tabs, Drive and Settings, each one full screen ---------- */
+.main-tabs { display: flex; justify-content: center; gap: 8px; max-width: 1400px; margin: 0 auto; padding: 10px 20px 0; }
+.main-tabs button {
+  flex: 1 1 0; max-width: 280px; min-height: 48px; padding: 0 16px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--muted);
+  font-size: 17px; font-weight: 700; font-stretch: 108%; cursor: pointer; touch-action: manipulation;
+}
+.main-tabs button:hover { color: var(--text); border-color: rgba(232, 176, 74, 0.45); }
+.main-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(232, 176, 74, 0.12); }
+body:has(.race.race-big) .main-tabs { display: none; }
+
+.dash { grid-template-columns: minmax(0, 1fr); }
+.drive-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.drive-top, .drive-pads { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 640px; margin: 0 auto; }
+body.tab-drive .control-panel { display: none; }
+body.tab-settings .drive-col { display: none; }
+/* Settings: the cars on the left, the options on the right (one column on a phone) */
+.control-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.set-cars, .set-opts { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+@media (min-width: 900px) { .control-panel { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; } }
+/* The maximize button is not needed: the Drive tab already is the whole screen */
+.gauge-max { display: none !important; }
+/* Drive tab, Road view: the dial takes the screen height (not on a phone held upright, where the pedals need the room) */
+@media (min-width: 861px), (orientation: landscape) {
+  body.tab-drive:not(.view-race) .gauge { max-width: max(200px, calc(100vh - 330px)); }
+  body.tab-drive.mode-demo:not(.view-race) .gauge { max-width: max(200px, calc(100vh - 470px)); }
+}
+
+/* Wide Drive tab: lap time and delta share the row, and the Road / Race switch always sits above the dial (not under the side boxes) */
+@media (min-width: 900px) { .race-main { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.drive-top .start-btn { min-height: 60px; }
+.drive-top .risk-note { margin: 0; font-size: 12.5px; text-align: center; }
+@media (min-width: 861px), (orientation: landscape) {
+  body.tab-drive:not(.view-race) .gauge { max-width: max(200px, calc(100vh - 300px)); }
+  body.tab-drive.mode-demo:not(.view-race) .gauge { max-width: max(200px, calc(100vh - 440px)); }
+}
