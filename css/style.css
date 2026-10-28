@@ -24,11 +24,11 @@
   --line: rgba(233, 238, 234, 0.1);
   --text: #e9eeea;
   --muted: #8d9aa3;
-  --accent: #e8b04a;       /* brass */
-  --accent-2: #f2c978;     /* brass, lit */
+  --accent: #FF8000;       /* McLaren orange */
+  --accent-2: #FF9A33;     /* McLaren orange, lit */
   --red: #e5484d;
   --green: #7fd6b8;        /* ok */
-  --amber: #f0883e;        /* warning */
+  --amber: #FF8000;        /* warning */
   --radius: 10px;
   --radius-sm: 7px;
   font-family: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -152,7 +152,7 @@ button {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
   /* The dial sits on a faintly lit face, like a backlit instrument. */
   background:
-    radial-gradient(ellipse 70% 55% at 50% 42%, rgba(232, 176, 74, 0.07), transparent 70%),
+    radial-gradient(ellipse 70% 55% at 50% 42%, rgba(255, 128, 0, 0.07), transparent 70%),
     var(--panel);
   /* Holding a pedal must not select the speed / rpm text around it on iPhone. */
   user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
@@ -250,7 +250,7 @@ button {
   touch-action: manipulation;
   transition: border-color .15s, color .15s;
 }
-.car-picker button:hover { border-color: rgba(232, 176, 74, 0.45); }
+.car-picker button:hover { border-color: rgba(255, 128, 0, 0.45); }
 .car-picker button { position: relative; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .car-picker img { -webkit-user-drag: none; pointer-events: none; }
 .pick-grip {
@@ -403,7 +403,7 @@ button {
   right: 0;
   top: 0;
   height: calc(var(--press, 0) * 100%);
-  background: linear-gradient(180deg, rgba(232, 176, 74, 0.12), rgba(232, 176, 74, 0.5));
+  background: linear-gradient(180deg, rgba(255, 128, 0, 0.12), rgba(255, 128, 0, 0.5));
   border-bottom: 2px solid var(--accent);
   opacity: 0;
 }
@@ -448,7 +448,7 @@ body:not(.mode-demo) .demo-only { display: none; }
 }
 .pad-rev.shown { display: flex; }
 .pad-rev.dock { position: absolute; left: 16px; z-index: 5; box-shadow: none; }
-.pad-rev.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); }
+.pad-rev.active { background: rgba(255, 128, 0, 0.2); border-color: var(--accent-2); }
 .pad:disabled { opacity: 0.4; }
 .mode-demo .pad-rev small { display: none; }
 
@@ -483,7 +483,7 @@ body:not(.mode-demo) .demo-only { display: none; }
 .batt-set-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .batt-set-row .field-input input { width: 80px; }
 .small-btn { min-height: 44px; padding: 0 18px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; touch-action: manipulation; }
-.small-btn:hover { border-color: rgba(232, 176, 74, 0.55); }
+.small-btn:hover { border-color: rgba(255, 128, 0, 0.55); }
 .batt-set .hint { margin: 0; }
 .batt-set .hint.warn { color: var(--red); }
 
@@ -520,7 +520,7 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
   transition: border-color .2s;
 }
 .more-btn::after { content: ''; width: 8px; height: 8px; border: solid var(--accent-2); border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform .25s; }
-.more-btn:hover { border-color: rgba(232, 176, 74, .45); }
+.more-btn:hover { border-color: rgba(255, 128, 0, .45); }
 .more-btn[aria-expanded="true"]::after { transform: translateY(2px) rotate(-135deg); }
 .more-settings { display: flex; flex-direction: column; gap: 4px; }
 .more-settings[hidden] { display: none; }
@@ -619,7 +619,7 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
   cursor: pointer;
   touch-action: manipulation;
 }
-.gauge-max:hover { color: var(--text); border-color: rgba(232, 176, 74, 0.55); }
+.gauge-max:hover { color: var(--text); border-color: rgba(255, 128, 0, 0.55); }
 .gauge-max svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .gauge-max .ico-min, .gauge-max-on .gauge-max .ico-max { display: none; }
 .gauge-max-on .gauge-max .ico-min { display: block; }
@@ -737,7 +737,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
   display: flex; flex-direction: column; gap: 4px;
   margin-bottom: 12px; padding: 12px 14px;
   border: 1px solid var(--amber); border-left-width: 4px; border-radius: var(--radius-sm);
-  background: rgba(240, 136, 62, 0.09);
+  background: rgba(255, 128, 0, 0.09);
   color: var(--text); font-size: 15px; line-height: 1.4;
 }
 .gps-warn[hidden] { display: none; }
@@ -773,17 +773,17 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
   align-items: center;
   gap: 10px;
   padding: 6px 8px;
-  border: 1px solid rgba(232, 176, 74, 0.6);
+  border: 1px solid rgba(255, 128, 0, 0.6);
   border-left-width: 4px;
   border-radius: var(--radius-sm);
-  background: rgba(232, 176, 74, 0.09);
+  background: rgba(255, 128, 0, 0.09);
   text-align: left;
 }
 .my-car.dragging {
   position: relative;
   z-index: 3;
   cursor: grabbing;
-  background: rgba(232, 176, 74, 0.2);
+  background: rgba(255, 128, 0, 0.2);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
 }
 .my-car .pick-art { width: 92px; flex: none; }
@@ -976,7 +976,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 .pad-launch.shown { display: flex; }
-.pad-launch.active { background: rgba(232, 176, 74, 0.2); border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(232, 176, 74, 0.35), 0 8px 24px rgba(0, 0, 0, 0.5); }
+.pad-launch.active { background: rgba(255, 128, 0, 0.2); border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(255, 128, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.5); }
 
 /* Info box: compass, altitude, position and clock (GPS). Bottom right of the gauge panel on a wide screen, a row under the dial otherwise. */
 .info-box {
@@ -1024,7 +1024,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .accel-list dd.run { color: var(--accent); }
 .accel-btns { display: flex; gap: 6px; }
 .accel-btns .ghost-btn { flex: 1; min-width: 0; min-height: 38px; padding: 0 2px; font-size: 13px; }
-.accel-btns .ghost-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: rgba(255,176,32,.12); }
+.accel-btns .ghost-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: rgba(255, 128, 0,.12); }
 .accel-state { margin-top: -4px; font-size: 12px; color: var(--muted); }
 .accel-state.on { color: var(--accent); }
 .accel-list dt { white-space: nowrap; }
@@ -1045,7 +1045,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
   background: var(--panel-2); color: var(--muted);
   cursor: pointer; touch-action: manipulation; transition: border-color .15s, color .15s;
 }
-.scale-tiles button:hover { border-color: rgba(232, 176, 74, 0.45); }
+.scale-tiles button:hover { border-color: rgba(255, 128, 0, 0.45); }
 .scale-tiles button b { font-size: 15px; font-weight: 700; color: var(--text); }
 .scale-tiles button small { font-size: 12px; font-weight: 500; line-height: 1.2; text-align: center; }
 .scale-tiles svg { width: 54px; height: 34px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
@@ -1108,12 +1108,12 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
   min-height: 46px; padding: 0 4px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel-2); color: var(--text);
   font: inherit; font-size: 14.5px; font-weight: 650; cursor: pointer; touch-action: manipulation; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15;
 }
-.rbtn:hover:not(:disabled) { border-color: rgba(232, 176, 74, 0.55); }
+.rbtn:hover:not(:disabled) { border-color: rgba(255, 128, 0, 0.55); }
 .rbtn:disabled { opacity: 0.38; cursor: default; }
 .rbtn.go { background: #1c4a38; border-color: #2f7d5e; color: #bdf1dc; }
 .rbtn.stop { color: #ff8a8e; }
 .rbtn small { color: var(--muted); font-size: 11px; font-weight: 500; }
-.rbtn.learn.active { border-color: var(--accent); color: var(--accent-2); background: rgba(232, 176, 74, 0.12); }
+.rbtn.learn.active { border-color: var(--accent); color: var(--accent-2); background: rgba(255, 128, 0, 0.12); }
 .rbtn.learn b { font-weight: 650; }
 
 .race-map {
@@ -1126,7 +1126,7 @@ html.no-scroll, html.no-scroll body { overflow: hidden; }
 .rm-trail { fill: none; stroke: var(--accent); stroke-width: 3.5px; stroke-linejoin: round; stroke-linecap: round; opacity: 0.9; vector-effect: non-scaling-stroke; }
 .rm-sec { fill: none; stroke: #fff; stroke-width: 2px; opacity: 0.85; vector-effect: non-scaling-stroke; }
 .rm-sf { fill: none; stroke: #fff; stroke-width: 4px; vector-effect: non-scaling-stroke; }
-.rm-arrow { fill: var(--accent-2); stroke: #000; stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(242, 201, 120, 0.7)); }
+.rm-arrow { fill: var(--accent-2); stroke: #000; stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(255, 154, 51, 0.7)); }
 .rm-nring { fill: rgba(0, 0, 0, 0.45); stroke: #3b4856; stroke-width: 1.5; }
 .rm-narrow { fill: #ff6b6f; }
 .rm-n { fill: #e9eeea; font-size: 11px; font-weight: 700; }
@@ -1548,13 +1548,13 @@ body.moto .lean-g { display: block; }
 .lean-hist .lh span { display: flex; align-items: center; gap: 6px; height: 14px; }
 .lean-hist .lh-l { justify-content: flex-end; }
 .lean-hist .lh i { display: block; height: 10px; border-radius: 3px; background: #4aa8ff; min-width: 0; }
-.lean-hist .lh-r i { background: #ffb020; }
+.lean-hist .lh-r i { background: #FF8000; }
 .lean-hist .lh em { font-style: normal; color: var(--muted); min-width: 28px; font-variant-numeric: tabular-nums; }
 .lean-hist .lh-l em { text-align: right; }
 
 /* ---------- v53: acceleration leaderboard ---------- */
 .accel-box.dock .accel-lb, .accel-lb { margin-top: 0; }
-.accel-save { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(255,176,32,.12) !important; font-weight: 700; }
+.accel-save { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(255, 128, 0,.12) !important; font-weight: 700; }
 .accel-save[hidden], .accel-lb[hidden] { display: none; }
 .accel-msg { margin: 0; font-size: 12.5px; line-height: 1.35; color: var(--muted); }
 .accel-msg[hidden] { display: none; }
@@ -1564,7 +1564,7 @@ body.moto .lean-g { display: block; }
 .lb-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 4px 0 10px; }
 .lb-tabs button { min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--muted); font-weight: 700; font-size: 15px; cursor: pointer; }
 .lb-tabs button small { font-weight: 500; font-size: 11px; }
-.lb-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(255,176,32,.12); }
+.lb-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(255, 128, 0,.12); }
 .lb-cats { margin-bottom: 6px; }
 .lb-cats button { min-height: 36px; font-size: 13px; padding: 0 2px; }
 .lb-who { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
@@ -1580,7 +1580,7 @@ body.moto .lean-g { display: block; }
 }
 .lb-tbl td.lb-t { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; white-space: nowrap; }
 .lb-tbl th:last-child, .lb-tbl td.lb-t { text-align: right; }
-.lb-tbl tr.me td { background: rgba(255,176,32,.14); }
+.lb-tbl tr.me td { background: rgba(255, 128, 0,.14); }
 .lb-foot { margin-top: 8px; text-align: right; }
 .lb-f { display: grid; gap: 4px; margin: 0 0 10px; font-size: 13.5px; color: var(--muted); }
 .lb-f input, .lb-f select { width: 100%; box-sizing: border-box; min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--text); font-size: 16px; padding: 0 10px; }
@@ -1593,8 +1593,8 @@ body.moto .lean-g { display: block; }
   border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: var(--muted);
   font-size: 15px; font-weight: 700; font-stretch: 108%; cursor: pointer; touch-action: manipulation;
 }
-.main-tabs button:hover { color: var(--text); border-color: rgba(232, 176, 74, 0.45); }
-.main-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(232, 176, 74, 0.12); }
+.main-tabs button:hover { color: var(--text); border-color: rgba(255, 128, 0, 0.45); }
+.main-tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: rgba(255, 128, 0, 0.12); }
 .main-tabs + .chips { margin-left: 8px; }
 body:has(.race.race-big) .main-tabs { display: none; }
 @media (max-width: 700px) {
@@ -1622,15 +1622,25 @@ body.tab-drive .help, body.tab-drive .foot-made { display: none; }
 .help, .foot-made { max-width: none; }
 .help-intro, .help-steps, .help-know, .foot-made p, .made-legal { max-width: none; }
 
-/* Start: a small round button in the top left corner of the gauge panel, the Road / Race switch beside it */
+/* Start: a pill button in the top left corner of the gauge panel, shaped like the Road / Race switch beside it, filled McLaren orange */
+.gauge-panel { --sw: 158px; }
 .gauge-panel > .start-btn {
   position: absolute; top: 12px; left: 12px; z-index: 6;
-  width: 52px; height: 52px; min-height: 0; padding: 0; gap: 0;
-  border-radius: 50%; font-size: 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  width: var(--sw); height: 42px; min-height: 0; padding: 0 10px; gap: 8px;
+  border-radius: var(--radius); background: var(--accent); color: #1a0d00;
+  font-size: 14px; font-weight: 800; font-stretch: 100%; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
-.gauge-panel > .start-btn #startLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.gauge-panel > .start-btn .start-ring { width: 24px; height: 24px; }
-.view-race .view-toggle { left: 76px; top: 18px; }
+.gauge-panel > .start-btn:hover { background: var(--accent-2); }
+.gauge-panel > .start-btn.on { background: var(--panel-3); color: var(--text); box-shadow: inset 0 -2px 0 var(--accent), 0 2px 10px rgba(0, 0, 0, 0.35); }
+.gauge-panel > .start-btn .start-ring { display: none; }
+.gauge-panel > .start-btn.on .start-ring { display: block; width: 10px; height: 10px; border-width: 0; }
+.view-toggle.inline { align-self: flex-start; margin-left: calc(var(--sw) + 22px - 4px); }
+.view-race .view-toggle { left: calc(var(--sw) + 22px); top: 12px; }
+@media (max-width: 520px) {
+  .gauge-panel { --sw: 132px; }
+  .gauge-panel > .start-btn { font-size: 12.5px; letter-spacing: 0.04em; padding: 0 6px; }
+}
 
 /* The two side boxes hug the dial: full height, with the edge towards the dial cut round (app.js sets --mx --my --mr) */
 .accel-box.dock, .info-box.float {
@@ -1641,7 +1651,7 @@ body.tab-drive .help, body.tab-drive .foot-made { display: none; }
 }
 .accel-box.dock::after, .info-box.float::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
-  background: radial-gradient(circle at var(--mx) var(--my), transparent calc(var(--mr) + 0.6px), rgba(232, 176, 74, 0.5) calc(var(--mr) + 1.2px), rgba(232, 176, 74, 0.5) calc(var(--mr) + 2.4px), transparent calc(var(--mr) + 3px));
+  background: radial-gradient(circle at var(--mx) var(--my), transparent calc(var(--mr) + 0.6px), rgba(255, 128, 0, 0.5) calc(var(--mr) + 1.2px), rgba(255, 128, 0, 0.5) calc(var(--mr) + 2.4px), transparent calc(var(--mr) + 3px));
 }
 .accel-box.dock .accel-title { font-size: calc(17px * var(--bs)); }
 .accel-box.dock .accel-state { font-size: calc(12px * var(--bs)); }
@@ -1672,3 +1682,71 @@ body.tab-drive .help, body.tab-drive .foot-made { display: none; }
   .race-map-zoom { right: 8px; bottom: 8px; gap: 5px; }
   .race-map-zoom button { min-width: 34px; height: 34px; padding: 0 8px; }
 }
+
+/* v58: a larger dial on wide screens, so the two boxes that embrace it can be smaller */
+@media (min-width: 1000px) {
+  .gauge { max-width: min(560px, max(220px, calc(100vh - 300px))); }
+}
+/* v58: the Boombox steps inside a question */
+.help-faq .faq .boombox-steps { margin: 0 0 14px; padding-left: 22px; max-width: none; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.help-faq .faq .boombox-steps li { margin-bottom: 6px; }
+.help-faq .faq .boombox-steps strong { color: var(--text); }
+.help-faq .faq-col { min-width: 0; }
+
+/* ---------- v59: Settings as separate, titled cards ---------- */
+.set-card {
+  display: flex; flex-direction: column; gap: 12px; min-width: 0;
+  padding: 16px; border: 1px solid var(--line); border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.set-opts { gap: 14px; }
+.set-head { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.set-head h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 750; letter-spacing: -0.01em; }
+.set-head h3::before { content: ""; width: 4px; height: 18px; border-radius: 2px; background: var(--accent); flex: none; }
+.set-head p { margin: 6px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+.set-card .settings { border-top: 0; padding-top: 0; }
+.set-card .risk-note { margin: 0; }
+.set-opts > .risk-note { text-align: center; padding: 4px 8px 0; }
+
+.ext-state { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); font-size: 14.5px; font-weight: 600; }
+.ext-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+.ext-dot.ok { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.ext-dot.warn { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.ext-dot.bad { background: var(--red); }
+.ext-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ext-btns .hint { margin: 0; }
+.ext-btns .small-btn { flex: 1 1 auto; }
+.ext-btns [hidden], .ext-grid[hidden], .obd-pick[hidden], .obd-live[hidden] { display: none; }
+.small-btn.ghost { background: transparent; }
+.small-btn[disabled] { opacity: 0.45; cursor: default; }
+.ext-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+.ext-grid > div { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); min-width: 0; }
+.ext-grid small { display: block; color: var(--muted); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+.ext-grid b { display: block; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ext-guide { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.ext-guide summary { padding: 11px 14px; cursor: pointer; font-weight: 650; font-size: 14.5px; list-style: none; display: flex; justify-content: space-between; }
+.ext-guide summary::-webkit-details-marker { display: none; }
+.ext-guide summary::after { content: '+'; color: var(--accent-2); font-weight: 700; }
+.ext-guide[open] summary::after { content: '\2013'; }
+.ext-guide .help-steps { margin: 0; padding: 0 14px 12px 34px; max-width: none; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.ext-guide .help-steps li { margin-bottom: 6px; }
+.ext-guide .help-steps strong { color: var(--text); }
+
+.obd-pick { display: flex; flex-direction: column; gap: 10px; }
+.obd-pick-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.obd-pick-head .small-btn { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.obd-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; max-height: 340px; overflow: auto; padding: 2px; }
+.obd-item { display: flex; align-items: center; gap: 9px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 13.5px; cursor: pointer; min-width: 0; }
+.obd-item input { accent-color: var(--accent); width: 17px; height: 17px; flex: none; }
+.obd-item span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.obd-item i { font-style: normal; color: var(--accent-2); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.obd-item.on { border-color: rgba(255, 128, 0, 0.55); background: rgba(255, 128, 0, 0.08); }
+
+/* Live OBD readings under the dial in Drive */
+.obd-live { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; align-self: stretch; }
+.obd-tile { padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); min-width: 0; }
+.obd-tile small { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.obd-tile b { font-size: 22px; font-variant-numeric: tabular-nums; font-weight: 750; }
+.obd-tile em { font-style: normal; font-size: 12px; color: var(--muted); margin-left: 4px; }
+.obd-tile.stale b { color: var(--muted); }
