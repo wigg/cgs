@@ -1780,3 +1780,11 @@ body.fs-on .gauge-panel { min-height: calc(100vh - 16px); min-height: calc(100dv
 body.fs-on .gauge { max-width: min(calc(100vh - 110px), 100%); }
 body.fs-on.mode-demo .gauge { max-width: min(calc(100vh - 250px), 100%); }
 body.fs-on.view-race .gauge { max-width: none; }
+
+/* v64: maximized or full screen, the dial leaves room for the two boxes beside it (Tesla and other wide, short screens) */
+@media (min-width: 900px) and (orientation: landscape) {
+  .gauge-max-on .gauge { max-width: min(calc(100vh - 160px), max(300px, calc(100% - 470px))); }
+  .gauge-max-on.mode-demo .gauge { max-width: min(max(200px, calc(100vh - 360px)), max(300px, calc(100% - 470px))); }
+  body.fs-on .gauge { max-width: min(calc(100vh - 110px), max(300px, calc(100% - 470px))); }
+  body.fs-on.mode-demo .gauge { max-width: min(calc(100vh - 250px), max(300px, calc(100% - 470px))); }
+}
